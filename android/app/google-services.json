@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "196645790554",
+    "firebase_url": "https://templebooking-be973.firebaseio.com",
+    "project_id": "templebooking-be973",
+    "storage_bucket": "templebooking-be973.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196645790554:android:bf78143e1a38d8679c4963",
+        "android_client_info": {
+          "package_name": "com.heyhemant.book_darshan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "196645790554-etk0h4iqib8v041i4ejffdkckukl0sce.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heyhemant.book_darshan",
+            "certificate_hash": "2a157ce63cbd63f0873f92eec05d58589f5cb15a"
+          }
+        },
+        {
+          "client_id": "196645790554-3tld8mpla7k78t2s5ck9f1rs01nhjanv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhCpQ8fdxo5qj0nsPoh_p42cVrx00Jvjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "196645790554-3tld8mpla7k78t2s5ck9f1rs01nhjanv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
