@@ -17,6 +17,9 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  curved_navigation_bar: ^0.3.3
+  flutter_form_builder: ^3.11.0
+  url_launcher: ^5.5.0
   shared_preferences: ^0.5.6+3
   smooth_star_rating: 1.0.4+2
   google_fonts: ^0.3.10

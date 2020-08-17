@@ -17,6 +17,9 @@ class MyColors {
 
 class TempleInfo {
   final String name,
+      sms,
+      mob,
+      mail,
       image,
       type,
       reviewCount,
@@ -29,6 +32,9 @@ class TempleInfo {
 
   TempleInfo({
     this.name,
+    this.sms,
+    this.mob,
+    this.mail,
     this.image,
     this.type,
     this.reviews,
@@ -45,6 +51,12 @@ List<TempleInfo> templeInfo = [
   TempleInfo(
     image:
     'assets/icons/mandir.png',
+    sms:
+        'sms: 8094820068',
+    mob:
+        'tel:+91 8094820068',
+    mail:
+        'mailto: hemantbanjara8552gmail.com',
     about:
         "Bhinmal",
     certifications: "10",
@@ -59,6 +71,9 @@ List<TempleInfo> templeInfo = [
   TempleInfo(
     image:
         "assets/icons/church.png",
+    sms: 'sms: 8875360909',
+    mob: 'tel:+91 8875360909',
+    mail: 'mailto: aryanaudichya4444@gmail.com',
     about:
         "Here We are from Aryan ke Ghar ka Mandir Badi Sadri",
     certifications: "10",
@@ -73,6 +88,9 @@ List<TempleInfo> templeInfo = [
   TempleInfo(
     image:
         "assets/icons/majjid.png",
+    sms: 'sms: 6376332312',
+    mob: 'tel:+91 6376332312',
+    mail: 'mailto: aliabbasmashriqi@gmail.com',
     about:
         "Here we are from Ali Majjid",
     certifications: "10",
@@ -112,5 +130,3 @@ List<Map<String, dynamic>> categories = [
   },
 ];
 
-String avatar =
-    "https://pbs.twimg.com/profile_images/1233356631188082689/qcmTohZh_400x400.jpg";

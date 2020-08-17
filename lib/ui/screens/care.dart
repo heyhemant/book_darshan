@@ -6,7 +6,7 @@ import '../../global.dart';
 class CareScreen extends StatefulWidget {
   final int id;
 
-  const CareScreen({Key key, @required this.id}) : super(key: key);
+  const CareScreen({Key key, this.id}) : super(key: key);
   @override
   _CareScreenState createState() => _CareScreenState();
 }

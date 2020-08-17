@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import '../../global.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -97,10 +97,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: IconButton(
                                 icon: Icon(
-                                  Icons.email,
+                                  Icons.call,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: (){
+                                  launch('${templeInfo[widget.id].mob}');
+                                },
                               ),
                             ),
                             SizedBox(width: 15),
@@ -114,7 +116,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   Icons.email,
                                   color: Colors.white,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  launch('${templeInfo[widget.id].mail}');
+                                },
                               ),
                             ),
                           ],
@@ -138,7 +142,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         .copyWith(color: MyColors.blue),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+
+                                },
                               ),
                             )
                           ],
@@ -250,7 +256,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               "Make A Visit",
                               style: Theme.of(context).textTheme.button,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              launch("${templeInfo[widget.id].sms}");
+                            },
                           ),
                         ),
                       ],
@@ -263,5 +271,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
       ),
     );
+  }
+}
+_launchcall() async {
+  const url = 'tel:+91 8094820068';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+launchemail() async {
+  const url = 'mailto:hemantbanjara855@gmail.com';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
