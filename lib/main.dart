@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:book_darshan/login/signin.dart';
 import 'ui/screens/home.dart';
 import 'ui/screens/onboarding.dart';
 
@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Book Darshan',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         backgroundColor: Colors.white,
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         },
       ),
       routes: {
-        'home': (context) => HomeScreen(),
+        'home': (context) => SignInScreen(),
       },
     );
   }

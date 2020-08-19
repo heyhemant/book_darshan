@@ -2,8 +2,14 @@ import 'package:book_darshan/global.dart';
 import 'package:book_darshan/login/login_ui.dart';
 import 'package:book_darshan/ui/screens/history.dart';
 import 'package:book_darshan/ui/widgets/temple_container.dart';
+import 'package:book_darshan/services/auth.dart';
 
 import 'package:flutter/material.dart';
+
+ class mail {
+  String email;
+   mail(this.email){email = this.email;}
+}
 
 class nav extends StatefulWidget {
   @override
@@ -11,6 +17,47 @@ class nav extends StatefulWidget {
 }
 
 class _navState extends State<nav> {
+  AuthService _auth = AuthService();
+  mail _mail = mail(null);
+  Widget _buildAboutDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Do you want to sign out ?'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildAboutText(),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            _auth.signOut();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => login(),
+              ),
+            );
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Sign Out Now...'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAboutText() {
+    return new RichText(
+      text: new TextSpan(
+        text:
+            'You are currently logged in as ${_mail.email}',
+        style: const TextStyle(color: Colors.black87),
+      ),
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +66,16 @@ class _navState extends State<nav> {
         appBar: AppBar(
             backgroundColor: Colors.white,
             elevation: 0,
-            title:  Padding(
+            title: Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 15.0),
               child: Text(
                 'Book Darshan',
                 style: Theme.of(context)
                     .textTheme
                     .display1
-                    .copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                    .copyWith(fontWeight: FontWeight.bold, color: Colors.black),
               ),
-            )
-        ),
+            )),
         body: ListView(
           children: <Widget>[
             Padding(
@@ -44,26 +88,29 @@ class _navState extends State<nav> {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                          ],
+                          children: <Widget>[],
                         ),
                       ),
                       ClipOval(
                         child: Material(
                           color: Colors.white70, // button color
                           child: InkWell(
-                            splashColor: Colors.blueGrey, // inkwell color
-                            child: SizedBox(width: 57, height: 57, child: Icon(Icons.account_circle,
-                              color: Colors.grey,
-                              size: 57,)),
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    login(),
-                              ),
-                            ),
-                          ),
+                              splashColor: Colors.blueGrey, // inkwell color
+                              child: SizedBox(
+                                  width: 57,
+                                  height: 57,
+                                  child: Icon(
+                                    Icons.account_circle,
+                                    color: Colors.grey,
+                                    size: 57,
+                                  )),
+                              onTap: () => {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          _buildAboutDialog(context),
+                                    ),
+                                  }),
                         ),
                       ),
                     ],
@@ -97,9 +144,7 @@ class _navState extends State<nav> {
                             alignment: Alignment.centerRight,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5.0),
-                              child: Image.asset(
-                                  'assets/icons/temple.png'
-                              ),
+                              child: Image.asset('assets/icons/temple.png'),
                             ),
                           ),
                           Positioned.fill(
@@ -116,7 +161,7 @@ class _navState extends State<nav> {
                                   Text(
                                     "Your Upcoming Visits",
                                     style:
-                                    TextStyle(fontWeight: FontWeight.bold),
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   RaisedButton(
                                     shape: RoundedRectangleBorder(
@@ -130,8 +175,7 @@ class _navState extends State<nav> {
                                     onPressed: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            history(),
+                                        builder: (context) => history(),
                                       ),
                                     ),
                                   )
@@ -152,7 +196,7 @@ class _navState extends State<nav> {
                       scrollDirection: Axis.horizontal,
                       children: List.generate(
                         categories.length,
-                            (f) => Container(
+                        (f) => Container(
                           constraints: BoxConstraints(
                               maxWidth: MediaQuery.of(context).size.width / 2),
                           margin: const EdgeInsets.symmetric(horizontal: 9.0),

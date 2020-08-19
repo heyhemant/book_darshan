@@ -4,10 +4,12 @@ import 'package:book_darshan/login/widgets/responsive_ui.dart';
 import 'package:book_darshan/login/widgets/textformfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:book_darshan/ui/screens/navigations.dart';
+import 'package:book_darshan/ui/screens/home.dart';
 
 
 class SignInPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +25,6 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   double _height;
   double _width;
   double _pixelRatio;
@@ -74,6 +75,7 @@ class _SignInScreenState extends State<SignInScreen> {
               forgetPassTextRow(),
               SizedBox(height: _height / 12),
               button(),
+              guest(),
               signUpTextRow(),
             ],
           ),
@@ -234,6 +236,7 @@ class _SignInScreenState extends State<SignInScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () {
         _signInWithEmailAndPassword();
+        mail(_emailController.toString());
           print("Routing to your account");
 
       },
@@ -250,6 +253,39 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         padding: const EdgeInsets.all(12.0),
         child: Text('SIGN IN',style: TextStyle(fontSize: _large? 14: (_medium? 12: 10))),
+      ),
+    );
+  }
+
+  Widget guest() {
+    return RaisedButton(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+      onPressed: () {
+        _auth.signInAnonymously();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+        mail('Guest');
+        print("Routing to your account");
+
+      },
+      textColor: Colors.white,
+      padding: EdgeInsets.all(0.0),
+      child: Container(
+        alignment: Alignment.center,
+        width: _large? _width/4 : (_medium? _width/3.75: _width/3.5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          gradient: LinearGradient(
+            colors: <Color>[Colors.orange[200], Colors.pinkAccent],
+          ),
+        ),
+        padding: const EdgeInsets.all(12.0),
+        child: Text('Guest',style: TextStyle(fontSize: _large? 14: (_medium? 12: 10))),
       ),
     );
   }
