@@ -1,40 +1,44 @@
 import 'dart:async';
 import 'package:book_darshan/module/temple.dart';
-import 'package:book_darshan/services/Appointments.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class form extends StatelessWidget {
-  String _details;
+class search extends StatelessWidget {
   String _email;
-  String _now;
-  String _name;
   String _mob;
-  int _members;
   String _date;
-  final String temple;
-  form({this.temple});
-  String _add;
-  String _pincode;
-  @override
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _buildName() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Name of Family Head'),
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Name is Required';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _name = value;
+  Widget _fireSearch(String _email, String _mob, String _date) {
+    return new StreamBuilder(
+      stream: Firestore.instance
+          .collection('appointments')
+          .where('Date', isEqualTo: _date)
+          .where('Email', isEqualTo: _email)
+          .where('Mobile Number', isEqualTo: _mob)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return new Text('Loading...');
+        return new ListView.builder(
+          itemCount: snapshot.data.documents.length,
+          itemBuilder: (context, index) =>
+              _buildListItem(snapshot.data.documents[index]),
+        );
       },
     );
   }
+
+  Widget _buildListItem(DocumentSnapshot document) {
+    return new ListTile(
+      title: document['Name'],
+      subtitle: document['Temple Name'],
+    );
+  }
+
+  @override
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildemail() {
     return TextFormField(
@@ -47,37 +51,6 @@ class form extends StatelessWidget {
       },
       onSaved: (String value) {
         _email = value;
-      },
-    );
-  }
-
-  Widget _builadd() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Address'),
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Address is Required';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _add = value;
-      },
-    );
-  }
-
-  Widget _buildmembers() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Phone number'),
-      keyboardType: TextInputType.phone,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Phone number is Required';
-        }
-        return null;
-      },
-      onSaved: (String value) {
-        _members = value as int;
       },
     );
   }
@@ -99,23 +72,6 @@ class form extends StatelessWidget {
     );
   }
 
-  Widget _buildpincode() {
-    return TextFormField(
-      decoration: InputDecoration(labelText: 'Pincode'),
-      keyboardType: TextInputType.number,
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Pin Code is Required';
-        }
-
-        return null;
-      },
-      onSaved: (String value) {
-        _pincode = value;
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final temples = Provider.of<List<Temple>>(context);
@@ -129,7 +85,7 @@ class form extends StatelessWidget {
                 title: Padding(
                   padding: const EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 15.0),
                   child: Text(
-                    'Book Temple',
+                    'Check Status of Your Application',
                     style: Theme.of(context).textTheme.display1.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
@@ -144,7 +100,6 @@ class form extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      _buildName(),
                       DateTimePicker(
                         type: DateTimePickerType.date,
                         dateMask: 'd MMM, yyyy',
@@ -160,30 +115,24 @@ class form extends StatelessWidget {
                         },
                         onSaved: (String val) {
                           _date = val;
-                          _now = DateTime.now().toString();
                         },
                       ),
-                      _builadd(),
                       _buildmob(),
                       _buildemail(),
-                      _buildpincode(),
                       SizedBox(height: 100),
                       RaisedButton(
                         child: Text(
                           'Submit',
                           style: TextStyle(color: Colors.blue, fontSize: 16),
                         ),
-                        onPressed: () async {
+                        onPressed: () {
                           // ignore: await_only_futures
-                          await Timer(Duration(seconds: 3), () {
-                            if (!_formKey.currentState.validate()) {
-                              return;
-                            }
-                            _formKey.currentState.save();
-                            Appointments(ref: _date)
-                                .book(_name, _date, _add, _mob, _email, temple);
-                            //Send to API
-                          });
+
+                          // if (!_formKey.currentState.validate()) {
+                          //   return _fireSearch(_email, _mob, _date);
+                          // }
+                          // _formKey.currentState.save();
+                          _fireSearch(_email, _mob, _date);
                         },
                       )
                     ],

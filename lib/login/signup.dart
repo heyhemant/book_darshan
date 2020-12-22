@@ -1,35 +1,102 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:book_darshan/login/constants.dart';
-import 'package:book_darshan/login/widgets/custom_shape.dart';
-import 'package:book_darshan/login/widgets/customappbar.dart';
-import 'package:book_darshan/login/widgets/responsive_ui.dart';
 import 'package:book_darshan/login/widgets/textformfield.dart';
+import 'package:book_darshan/services/Database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 
-
-
-class SignUpScreen extends StatefulWidget {
-
-
-
+class red extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  State<StatefulWidget> createState() {
+    return redState();
+  }
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  String name;
+class redState extends State<red> {
+  List<String> _type = [
+    'Mandir',
+    'Majjid',
+    'Guru Dwara',
+    'Church',
+    'Jain Mnadir'
+  ];
+  bool _success;
+  String _userEmail;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void _tepreg() async {
+    final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+      email: _email.text,
+      password: _pass.text,
+    ))
+        .user;
+    if (user != null) {
+      setState(() {
+        _success = true;
+      });
+    } else {
+      _success = false;
+    }
+  }
+
+  String _name;
+  TextEditingController _email, _pass;
+  String _oktype;
+  String _god;
+  String _address;
+  String _phoneNumber;
+  String _pincode;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _fname = TextEditingController();
-  final TextEditingController _lname = TextEditingController();
-  final TextEditingController _mob = TextEditingController();
+
+  Widget _buildName() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Name of Temple'),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Name is Required';
+        }
+
+        return null;
+      },
+      onSaved: (String value) {
+        _name = value;
+      },
+    );
+  }
+
+  Widget _buildgod() {
+    return TextFormField(
+      decoration: InputDecoration(
+          labelText: 'Enter The Name Of Bhagwan in case of Hindu Mandir'),
+      onSaved: (String value) {
+        _god = value;
+      },
+    );
+  }
+
+  Widget _buildemail() {
+    return CustomTextField(
+      keyboardType: TextInputType.emailAddress,
+      icon: Icons.email,
+      hint: "Email ID",
+      textEditingController: _email,
+    );
+  }
+
+  Widget _buildpass() {
+    return CustomTextField(
+      keyboardType: TextInputType.text,
+      obscureText: true,
+      icon: Icons.lock,
+      hint: "Password",
+      textEditingController: _pass,
+    );
+  }
 
   void _register() async {
     final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text,
+      email: _email.text,
+      password: _pass.text,
     ))
         .user;
     if (user != null) {
@@ -42,43 +109,124 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  bool _success;
-  String _userEmail;
+  Widget _builaddress() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Address'),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Address is Required';
+        }
 
-  bool checkBoxValue = false;
-  double _height;
-  double _width;
-  double _pixelRatio;
-  bool _large;
-  bool _medium;
+        return null;
+      },
+      onSaved: (String value) {
+        _address = value;
+      },
+    );
+  }
+
+  Widget _buildPhoneNumber() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Phone number'),
+      keyboardType: TextInputType.phone,
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Phone number is Required';
+        }
+
+        return null;
+      },
+      onSaved: (String value) {
+        _phoneNumber = value;
+      },
+    );
+  }
+
+  Widget _buildpincode() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Pincode'),
+      keyboardType: TextInputType.number,
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Pin Code is Required';
+        }
+
+        return null;
+      },
+      onSaved: (String value) {
+        _pincode = value;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    _height = MediaQuery.of(context).size.height;
-    _width = MediaQuery.of(context).size.width;
-    _pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    _large =  ResponsiveWidget.isScreenLarge(_width, _pixelRatio);
-    _medium =  ResponsiveWidget.isScreenMedium(_width, _pixelRatio);
-
-    return Material(
-      child: Scaffold(
-        body: Container(
-          height: _height,
-          width: _width,
-          margin: EdgeInsets.only(bottom: 5),
-          child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 15.0),
+            child: Text(
+              'Register Your Temple Here',
+              style: Theme.of(context).textTheme.display1.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.black),
+            ),
+          )),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Opacity(opacity: 0.88,child: CustomAppBar()),
-                clipShape(),
-                form(),
-                acceptTermsTextRow(),
-                SizedBox(height: _height/35,),
-                button(),
-                infoTextRow(),
-                socialIconsRow(),
-                //signInTextRow(),
+                _buildName(),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5.5, horizontal: 10),
+                  child: DropdownButton(
+                      isExpanded: true,
+                      hint: Text('Please choose Type of Temple'),
+                      value: _oktype,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _oktype = newValue;
+                        });
+                      },
+                      items: _type.map((location) {
+                        return DropdownMenuItem(
+                          child: new Text(location),
+                          value: location,
+                        );
+                      }).toList()),
+                ),
+                _buildgod(),
+                _builaddress(),
+                _buildPhoneNumber(),
+                _buildpincode(),
+                _buildemail(),
+                _buildpass(),
+                SizedBox(height: 100),
+                RaisedButton(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.blue, fontSize: 16),
+                  ),
+                  onPressed: () async {
+                    if (!_formKey.currentState.validate()) {
+                      return;
+                    }
+                    _register();
+                    _formKey.currentState.save();
+                    await DatabaseService(mob: _phoneNumber).updateUserData(
+                        _oktype, _name, _phoneNumber, _pincode, _address);
+
+                    //Send to API
+                  },
+                )
               ],
             ),
           ),
@@ -86,271 +234,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-
-  Widget clipShape() {
-    return Stack(
-      children: <Widget>[
-        Opacity(
-          opacity: 0.75,
-          child: ClipPath(
-            clipper: CustomShapeClipper(),
-            child: Container(
-              height: _large? _height/8 : (_medium? _height/7 : _height/6.5),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.orange[200], Colors.pinkAccent],
-                ),
-              ),
-            ),
-          ),
-        ),
-        Opacity(
-          opacity: 0.5,
-          child: ClipPath(
-            clipper: CustomShapeClipper2(),
-            child: Container(
-              height: _large? _height/12 : (_medium? _height/11 : _height/10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.orange[200], Colors.pinkAccent],
-                ),
-              ),
-            ),
-          ),
-        ),
-        Container(
-          height: _height / 5.5,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  spreadRadius: 0.0,
-                  color: Colors.black26,
-                  offset: Offset(1.0, 10.0),
-                  blurRadius: 20.0),
-            ],
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          child: GestureDetector(
-              onTap: (){
-                print('Adding photo');
-              },
-
-              child: Icon(Icons.add_a_photo, size: _large? 40: (_medium? 33: 31),color: Colors.orange[200],)),
-        ),
-//        Positioned(
-//          top: _height/8,
-//          left: _width/1.75,
-//          child: Container(
-//            alignment: Alignment.center,
-//            height: _height/23,
-//            padding: EdgeInsets.all(5),
-//            decoration: BoxDecoration(
-//              shape: BoxShape.circle,
-//              color:  Colors.orange[100],
-//            ),
-//            child: GestureDetector(
-//                onTap: (){
-//                  print('Adding photo');
-//                },
-//                child: Icon(Icons.add_a_photo, size: _large? 22: (_medium? 15: 13),)),
-//          ),
-//        ),
-      ],
-    );
-  }
-
-  Widget form() {
-    return Container(
-      margin: EdgeInsets.only(
-          left:_width/ 12.0,
-          right: _width / 12.0,
-          top: _height / 20.0),
-      child: Form(
-        child: Column(
-          children: <Widget>[
-            firstNameTextFormField(),
-            SizedBox(height: _height / 60.0),
-            lastNameTextFormField(),
-            SizedBox(height: _height/ 60.0),
-            emailTextFormField(),
-            SizedBox(height: _height / 60.0),
-            phoneTextFormField(),
-            SizedBox(height: _height / 60.0),
-            passwordTextFormField(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget firstNameTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.text,
-      icon: Icons.person,
-      hint: "First Name",
-      textEditingController: _fname,
-    );
-  }
-
-  Widget lastNameTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.text,
-      icon: Icons.person,
-      hint: "Last Name",
-      textEditingController: _lname,
-
-    );
-  }
-
-  Widget emailTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.emailAddress,
-      icon: Icons.email,
-      hint: "Email ID",
-      textEditingController: _emailController,
-    );
-  }
-
-  Widget phoneTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.number,
-      icon: Icons.phone,
-      hint: "Mobile Number",
-      textEditingController: _mob,
-    );
-  }
-
-  Widget passwordTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.text,
-      obscureText: true,
-      icon: Icons.lock,
-      hint: "Password",
-      textEditingController: _passwordController,
-    );
-  }
-
-  Widget acceptTermsTextRow() {
-    return Container(
-      margin: EdgeInsets.only(top: _height / 100.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Checkbox(
-              activeColor: Colors.orange[200],
-              value: checkBoxValue,
-              onChanged: (bool newValue) {
-                setState(() {
-                  checkBoxValue = newValue;
-                });
-              }),
-          Text(
-            "I accept all terms and conditions",
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: _large? 12: (_medium? 11: 10)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget button() {
-    return RaisedButton(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-      onPressed: () {
-        _register();
-      },
-      textColor: Colors.white,
-      padding: EdgeInsets.all(0.0),
-      child: Container(
-        alignment: Alignment.center,
-//        height: _height / 20,
-        width:_large? _width/4 : (_medium? _width/3.75: _width/3.5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          gradient: LinearGradient(
-            colors: <Color>[Colors.orange[200], Colors.pinkAccent],
-          ),
-        ),
-        padding: const EdgeInsets.all(12.0),
-        child: Text('SIGN UP', style: TextStyle(fontSize: _large? 14: (_medium? 12: 10)),),
-      ),
-    );
-  }
-
-  Widget infoTextRow() {
-    return Container(
-      margin: EdgeInsets.only(top: _height / 40.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Or create using social media",
-            style: TextStyle(fontWeight: FontWeight.w400, fontSize: _large? 12: (_medium? 11: 10)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget socialIconsRow() {
-    return Container(
-      margin: EdgeInsets.only(top: _height / 80.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          CircleAvatar(
-            radius: 15,
-            backgroundImage: AssetImage("assets/login/googlelogo.png"),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          CircleAvatar(
-            radius: 15,
-            backgroundImage: AssetImage("assets/login/fblogo.jpg"),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          CircleAvatar(
-            radius: 15,
-            backgroundImage: AssetImage("assets/login/twitterlogo.jpg"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget signInTextRow() {
-    return Container(
-      margin: EdgeInsets.only(top: _height / 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Already have an account?",
-            style: TextStyle(fontWeight: FontWeight.w400),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop(SIGN_IN);
-              print("Routing to Sign up screen");
-            },
-            child: Text(
-              "Sign in",
-              style: TextStyle(
-                  fontWeight: FontWeight.w800, color: Colors.orange[200], fontSize: 19),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
 }

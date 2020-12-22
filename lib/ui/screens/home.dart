@@ -1,10 +1,9 @@
 import 'package:book_darshan/ui/screens/care.dart';
 import 'package:book_darshan/ui/screens/history.dart';
 import 'package:book_darshan/ui/screens/navigations.dart';
-import 'package:book_darshan/ui/screens/search.dart';
 import 'package:book_darshan/ui/screens/templeRegistrationForm.dart';
 import 'package:flutter/material.dart';
-
+import 'package:book_darshan/Search/search.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,12 +16,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final tab = [
     nav(),
     search(),
-    FormScreen(),history(),
+    FormScreen(),
+    history(),
     CareScreen(),
-
   ];
   GlobalKey _bottomNavigationKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -49,8 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           },
         ),
-
-        body:tab[_page],
+        body: tab[_page],
       ),
     );
   }

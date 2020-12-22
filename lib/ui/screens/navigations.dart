@@ -1,24 +1,22 @@
 import 'package:book_darshan/global.dart';
 import 'package:book_darshan/login/login_ui.dart';
+import 'package:book_darshan/module/temple.dart';
+import 'package:book_darshan/services/Database.dart';
 import 'package:book_darshan/ui/screens/history.dart';
 import 'package:book_darshan/ui/widgets/temple_container.dart';
 import 'package:book_darshan/services/auth.dart';
-
 import 'package:flutter/material.dart';
-
- class mail {
-  String email;
-   mail(this.email){email = this.email;}
-}
+import 'package:book_darshan/services/templelist.dart';
+import 'package:provider/provider.dart';
 
 class nav extends StatefulWidget {
   @override
   _navState createState() => _navState();
 }
 
+// ignore: camel_case_types
 class _navState extends State<nav> {
   AuthService _auth = AuthService();
-  mail _mail = mail(null);
   Widget _buildAboutDialog(BuildContext context) {
     return new AlertDialog(
       title: const Text('Do you want to sign out ?'),
@@ -50,18 +48,16 @@ class _navState extends State<nav> {
   Widget _buildAboutText() {
     return new RichText(
       text: new TextSpan(
-        text:
-            'You are currently logged in as ${_mail.email}',
+        text: 'You are currently logged in as ',
         style: const TextStyle(color: Colors.black87),
       ),
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return StreamProvider<List<Temple>>.value(
+      value: DatabaseService().temples,
       child: Scaffold(
         appBar: AppBar(
             backgroundColor: Colors.white,
@@ -72,6 +68,7 @@ class _navState extends State<nav> {
                 'Book Darshan',
                 style: Theme.of(context)
                     .textTheme
+                    // ignore: deprecated_member_use
                     .display1
                     .copyWith(fontWeight: FontWeight.bold, color: Colors.black),
               ),
@@ -248,7 +245,12 @@ class _navState extends State<nav> {
                       ),
                       FlatButton(
                         child: Text("See All"),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TempleList()));
+                        },
                       )
                     ],
                   ),

@@ -17,7 +17,9 @@ environment:
   sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
+  date_time_picker: "^1.0.1"
   curved_navigation_bar: ^0.3.3
+  cloud_firestore: ^0.12.9
   flutter_form_builder: ^3.11.0
   url_launcher: ^5.5.0
   shared_preferences: ^0.5.6+3
@@ -25,6 +27,7 @@ dependencies:
   google_fonts: ^0.3.10
   firebase_auth: ^0.16.1
   firebase_core: ^0.4.5
+  provider: ^3.1.0
   flutter_signin_button: ^1.0.0
   google_sign_in: ^4.5.1
   flutter:
