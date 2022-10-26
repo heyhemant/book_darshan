@@ -18,18 +18,7 @@ class DatabaseService {
       'pincode': pincode,
     });
   }
-  List<Temple> _templeListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc){
-      print(doc.data);
-      return Temple(
-          name: doc.data['name'] ?? '',
-          add: doc.data['add'] ?? '',
-          pincode: doc.data['pincode'] ?? '',
-          type: doc.data['type'] ?? '',
-          mob: doc.data['mob'] ?? '',
-      );
-    }).toList();
-  }
+
   Stream<List<Temple>> get temples {
     return templesdata.snapshots()
         .map(_templeListFromSnapshot);
